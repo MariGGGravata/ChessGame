@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessGame.Board
 {
-    enum MyEnum
+    public enum Colour
     {
         Black,
         White
-    }
-
-    public class Colour
-    {
     }
 }
