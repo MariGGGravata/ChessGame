@@ -1,4 +1,5 @@
 ﻿using ChessGame.ChessPieces;
+using ChessGame.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,8 +26,8 @@ namespace ChessGame.Board
         {
             for (int i = 0; i < board.Column; i++)
             {
-                PutPiece(new Pawn(board, 1), new Position(1, i));
-                PutPiece(new Pawn(board, 2), new Position(6, i));
+                PutPiece(new Pawn(board, 0), new Position(1, i));
+                PutPiece(new Pawn(board, 1), new Position(6, i));
             }
         }
 
@@ -56,30 +57,33 @@ namespace ChessGame.Board
 
         public void PutPiece(Piece piece, Position position)
         {
-            try
+            if (HasPiece(position))
+                throw new BoardException("There is already a piece in this position.");
+
+            if (ValidPosition(position))
             {
-                if (ValidPosition(position))
-                {
-                    Parts[position.Line, position.Column] = piece;
-                    piece.Position = position;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
+                Parts[position.Line, position.Column] = piece;
+                piece.Position = position;
             }
         }
 
         private bool ValidPosition(Position position)
         {
             if (position.Line < 0 || position.Line >= Line || position.Column < 0 || position.Column >= Column)
-                throw new Exception("This position is invalid.");
+                return false;
 
             return true;
         }
 
+        private void ValidatingPosition(Position position)
+        {
+            if (!ValidPosition(position))
+                throw new BoardException("This position is invalid.");
+        }
+
         private bool HasPiece(Position position)
         {
+            ValidatingPosition(position);
             return Parts[position.Line, position.Column] != null;
         }
     }

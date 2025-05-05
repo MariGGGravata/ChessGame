@@ -1,5 +1,7 @@
 ﻿using ChessGame.ChessPieces;
 using ChessGame.Board;
+using ChessGame.Helpers.Exceptions;
+using ChessGame.ChessPieces.Moviments;
 
 namespace ChessGame
 {
@@ -7,20 +9,23 @@ namespace ChessGame
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the Chess Game!\n");
-            // Initialize the game and start playing
+            try
+            {
+                Board.Board board = new Board.Board();
 
-            Board.Board board = new Board.Board();
+                board.InsertFirstPieces(ref board);
+                board.InsertFirstPawnPieces(ref board);
 
-            board.InsertFirstPieces(ref board);
-            board.InsertFirstPawnPieces(ref board);
+                Screen.PrintBoard(board);
 
-            Console.WriteLine("\n");
-
-            Screen.PrintBoard(board);
+                Console.WriteLine("\n");
+            }
+            catch (BoardException be)
+            {
+                Console.WriteLine("Error: " + be.Message);
+            }
 
             Console.ReadLine();
-
         }
     }
 }
