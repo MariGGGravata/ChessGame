@@ -26,8 +26,8 @@ namespace ChessGame.Board
         {
             for (int i = 0; i < board.Column; i++)
             {
-                PutPiece(new Pawn(board, 0), new Position(1, i));
-                PutPiece(new Pawn(board, 1), new Position(6, i));
+                PutPiece(board, new Pawn(board, 0), new Position(1, i));
+                PutPiece(board, new Pawn(board, 1), new Position(6, i));
             }
         }
 
@@ -37,14 +37,14 @@ namespace ChessGame.Board
 
             for (int i = 0; i < 2; i++)
             {
-                PutPiece(new Tower(board, i), new Position(line, 0));
-                PutPiece(new Horse(board, i), new Position(line, 1));
-                PutPiece(new Bishop(board, i), new Position(line, 2));
-                PutPiece(new King(board, i), new Position(line, 3));
-                PutPiece(new Queen(board, i), new Position(line, 4));
-                PutPiece(new Bishop(board, i), new Position(line, 5));
-                PutPiece(new Horse(board, i), new Position(line, 6));
-                PutPiece(new Tower(board, i), new Position(line, 7));
+                PutPiece(board, new Tower(board, i), new Position(line, 0));
+                PutPiece(board, new Horse(board, i), new Position(line, 1));
+                PutPiece(board, new Bishop(board, i), new Position(line, 2));
+                PutPiece(board, new King(board, i), new Position(line, 3));
+                PutPiece(board, new Queen(board, i), new Position(line, 4));
+                PutPiece(board, new Bishop(board, i), new Position(line, 5));
+                PutPiece(board, new Horse(board, i), new Position(line, 6));
+                PutPiece(board, new Tower(board, i), new Position(line, 7));
 
                 line+=7;
             }
@@ -55,16 +55,27 @@ namespace ChessGame.Board
             return Parts[position.Line, position.Column];
         }
 
-        public void PutPiece(Piece piece, Position position)
+        public void PutPiece(Board board, Piece piece, Position position)
         {
-            if (HasPiece(position))
+            if (HasPiece(board, position))
                 throw new BoardException("There is already a piece in this position.");
 
             if (ValidPosition(position))
             {
-                Parts[position.Line, position.Column] = piece;
+                board.Parts[position.Line, position.Column] = piece;
                 piece.Position = position;
             }
+        }
+
+        public Piece RemovePiece(Board board, Position position)
+        {
+            if (board.Parts[position.Line, position.Column] == null)
+                return null;
+
+            Piece aux = board.Parts[position.Line, position.Column];
+            aux.Position = null;
+            board.Parts[position.Line, position.Column] = null;
+            return aux;
         }
 
         private bool ValidPosition(Position position)
@@ -81,10 +92,10 @@ namespace ChessGame.Board
                 throw new BoardException("This position is invalid.");
         }
 
-        private bool HasPiece(Position position)
+        private bool HasPiece(Board board, Position position)
         {
             ValidatingPosition(position);
-            return Parts[position.Line, position.Column] != null;
+            return board.Parts[position.Line, position.Column] != null;
         }
     }
 }

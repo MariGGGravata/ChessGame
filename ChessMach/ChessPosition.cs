@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChessGame.Board;
 
-namespace ChessGame.ChessPieces.Moviments
+namespace ChessGame.ChessMach
 {
     public class ChessPosition
     {
@@ -13,8 +13,8 @@ namespace ChessGame.ChessPieces.Moviments
         public int Line { get; set; }
         public ChessPosition(char column, int line)
         {
-            this.Column = column;
-            this.Line = line;
+            Column = column;
+            Line = line;
         }
 
         public Position ToPosition()

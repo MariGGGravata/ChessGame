@@ -20,5 +20,10 @@ namespace ChessGame.Board
             this.Colour = colour;
             this.QtyMove = 0;
         }
+
+        public void IncreaseQtyMove()
+        {
+            this.QtyMove++;
+        }
     }
 }

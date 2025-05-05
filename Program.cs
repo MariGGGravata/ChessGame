@@ -1,7 +1,7 @@
 ﻿using ChessGame.ChessPieces;
 using ChessGame.Board;
 using ChessGame.Helpers.Exceptions;
-using ChessGame.ChessPieces.Moviments;
+using ChessGame.ChessMach;
 
 namespace ChessGame
 {
@@ -11,14 +11,21 @@ namespace ChessGame
         {
             try
             {
-                Board.Board board = new Board.Board();
+                ChessBoardGame chessBoardGame = new ChessBoardGame();
 
-                board.InsertFirstPieces(ref board);
-                board.InsertFirstPawnPieces(ref board);
+                while (!chessBoardGame.finished)
+                {
+                    Console.Clear();
+                    Screen.PrintBoard(chessBoardGame.board);
 
-                Screen.PrintBoard(board);
+                    Console.WriteLine("Insert what piece position want to move:");
+                    Position origin = Screen.ReadChessPosition().ToPosition();
 
-                Console.WriteLine("\n");
+                    Console.WriteLine("Insert what position want to move:");
+                    Position destination = Screen.ReadChessPosition().ToPosition();
+
+                    chessBoardGame.MovingParties(chessBoardGame, origin, destination);
+                }
             }
             catch (BoardException be)
             {
