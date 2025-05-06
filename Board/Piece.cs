@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessGame.ChessMach;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChessGame.Board
 {
-    public class Piece
+    public abstract class Piece
     {
         public Position? Position { get; set; }
         public int Colour { get; set; }
@@ -25,5 +26,7 @@ namespace ChessGame.Board
         {
             this.QtyMove++;
         }
+
+        public abstract bool[,] PossibleMoves();
     }
 }

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace ChessGame.ChessMach
 {
-    public class ChessMoviments
+    public class ChessMoviments : Piece
     {
         private Board.Board board { get; set; }
         private Colour playerColour;
 
-        public ChessMoviments()
+        public ChessMoviments() : base(new Board.Board(), new int())
         {
-            board = new Board.Board();
-            playerColour = Colour.White;
+            this.board = new Board.Board();
+            this.playerColour = ChessGame.Board.Colour.White;
         }
 
         public void MovingParties(ChessBoardGame chessBoardGame, Position origin, Position destination)
@@ -24,6 +24,12 @@ namespace ChessGame.ChessMach
             p.IncreaseQtyMove();
             board.RemovePiece(chessBoardGame.board, destination);
             board.PutPiece(chessBoardGame.board, p, destination);
+        }
+
+        public bool CanMove(Position position)
+        {
+            Piece piece = Board.GetPart(position);
+            return piece == null || piece.Colour != Colour;
         }
     }
 }

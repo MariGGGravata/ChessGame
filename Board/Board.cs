@@ -60,7 +60,7 @@ namespace ChessGame.Board
             if (HasPiece(board, position))
                 throw new BoardException("There is already a piece in this position.");
 
-            if (ValidPosition(position))
+            if (IsValidPosition(position))
             {
                 board.Parts[position.Line, position.Column] = piece;
                 piece.Position = position;
@@ -78,7 +78,7 @@ namespace ChessGame.Board
             return aux;
         }
 
-        private bool ValidPosition(Position position)
+        public bool IsValidPosition(Position position)
         {
             if (position.Line < 0 || position.Line >= Line || position.Column < 0 || position.Column >= Column)
                 return false;
@@ -88,7 +88,7 @@ namespace ChessGame.Board
 
         private void ValidatingPosition(Position position)
         {
-            if (!ValidPosition(position))
+            if (!IsValidPosition(position))
                 throw new BoardException("This position is invalid.");
         }
 
