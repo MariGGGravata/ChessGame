@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,7 +59,7 @@ namespace ChessGame.Board
         public void PutPiece(Board board, Piece piece, Position position)
         {
             if (HasPiece(board, position))
-                throw new BoardException("There is already a piece in this position.");
+                throw new PositionException("There is already a piece in this position.");
 
             if (IsValidPosition(position))
             {
@@ -69,6 +70,8 @@ namespace ChessGame.Board
 
         public Piece RemovePiece(Board board, Position position)
         {
+            ValidatingPosition(position);
+
             if (board.Parts[position.Line, position.Column] == null)
                 return null;
 
@@ -89,10 +92,10 @@ namespace ChessGame.Board
         private void ValidatingPosition(Position position)
         {
             if (!IsValidPosition(position))
-                throw new BoardException("This position is invalid.");
+                throw new PositionException("This position is invalid.");
         }
 
-        private bool HasPiece(Board board, Position position)
+        public bool HasPiece(Board board, Position position)
         {
             ValidatingPosition(position);
             return board.Parts[position.Line, position.Column] != null;

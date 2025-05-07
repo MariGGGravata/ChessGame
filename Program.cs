@@ -9,27 +9,30 @@ namespace ChessGame
     {
         public static void Main(string[] args)
         {
+            ChessBoardGame chessBoardGame = new ChessBoardGame();
+            ChessMoviments chessMoviments = new ChessMoviments();
+
             try
             {
-                ChessBoardGame chessBoardGame = new ChessBoardGame();
-
-                while (!chessBoardGame.finished)
-                {
-                    Console.Clear();
-                    Screen.PrintBoard(chessBoardGame.board);
-
-                    Console.WriteLine("Insert what piece position want to move:");
-                    Position origin = Screen.ReadChessPosition().ToPosition();
-
-                    Console.WriteLine("Insert what position want to move:");
-                    Position destination = Screen.ReadChessPosition().ToPosition();
-
-                    chessBoardGame.MovingParties(chessBoardGame, origin, destination);
-                }
+                chessMoviments.GetMoviments(chessBoardGame);
+            }
+            catch (PositionException pe)
+            {
+                chessMoviments.GetMoviments(chessBoardGame);
+                Console.WriteLine("Error: " + pe.Message + ". Chose position again.");
+                Console.ReadLine();
             }
             catch (BoardException be)
             {
                 Console.WriteLine("Error: " + be.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Press any key to exit...");
             }
 
             Console.ReadLine();

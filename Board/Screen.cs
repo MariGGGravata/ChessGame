@@ -1,17 +1,16 @@
-﻿using ChessGame.Board;
-using ChessGame.ChessMach;
+﻿using ChessGame.ChessMach;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessGame
+namespace ChessGame.Board
 {
     public class Screen
     {
 
-        public static void PrintBoard(Board.Board board)
+        public static void PrintBoard(Board board)
         {
             Console.WriteLine("Welcome to the Chess Game!\n");
 
@@ -36,7 +35,7 @@ namespace ChessGame
                 Console.Write("- ");
             else
             {
-                Screen.ColourPiece(piece);
+                ColourPiece(piece);
                 Console.Write(" ");
             }
         }

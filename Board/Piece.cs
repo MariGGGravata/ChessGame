@@ -13,6 +13,7 @@ namespace ChessGame.Board
         public int Colour { get; set; }
         public int QtyMove { get; set; }
         public Board Board { get; set; }
+        public string PartType { get; set; }
 
         public Piece(Board board, int colour)
         {

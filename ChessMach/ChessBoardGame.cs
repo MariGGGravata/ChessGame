@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessGame.Helpers.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,20 @@ namespace ChessGame.ChessMach
             finished = false;
             this.CreateInitialBoard();
         }
+
         public void CreateInitialBoard()
         {
-            Board.Board boardInit = new Board.Board();
-            boardInit.InsertFirstPieces(ref boardInit);
-            boardInit.InsertFirstPawnPieces(ref boardInit);
-            this.board = boardInit;
+            try
+            {
+                Board.Board boardInit = new Board.Board();
+                boardInit.InsertFirstPieces(ref boardInit);
+                boardInit.InsertFirstPawnPieces(ref boardInit);
+                this.board = boardInit;
+            }
+            catch (BoardException be)
+            {
+                throw new BoardException(be.Message);
+            }
         }
     }
 }
