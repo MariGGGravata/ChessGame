@@ -27,18 +27,8 @@ namespace ChessGame.ChessPieces
             ChessMoviments chessMoviments = new ChessMoviments(Colour);
 
             // up
-            pos.SetValues(Position.Line - 1, Position.Column);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
-                    break;
-                pos.Line = pos.Line - 1;
-            }
-
-            // down
             pos.SetValues(Position.Line + 1, Position.Column);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -46,9 +36,19 @@ namespace ChessGame.ChessPieces
                 pos.Line = pos.Line + 1;
             }
 
+            // down
+            pos.SetValues(Position.Line - 1, Position.Column);
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
+            {
+                mat[pos.Line, pos.Column] = true;
+                if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
+                    break;
+                pos.Line = pos.Line - 1;
+            }
+
             // left
             pos.SetValues(Position.Line, Position.Column - 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -58,7 +58,7 @@ namespace ChessGame.ChessPieces
 
             // right
             pos.SetValues(Position.Line, Position.Column + 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)

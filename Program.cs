@@ -19,7 +19,13 @@ namespace ChessGame
             catch (PositionException pe)
             {
                 chessMoviments.GetMoviments(chessBoardGame);
-                Console.WriteLine("Error: " + pe.Message + ". Chose position again.");
+                Console.WriteLine("Error: " + pe.Message);
+                Console.ReadLine();
+            }
+            catch (MovementException me)
+            {
+                chessMoviments.GetMoviments(chessBoardGame);
+                Console.WriteLine("Error: " + me.Message);
                 Console.ReadLine();
             }
             catch (BoardException be)

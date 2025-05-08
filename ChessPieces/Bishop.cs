@@ -27,7 +27,7 @@ namespace ChessGame.ChessPieces
 
             // northwest
             pos.SetValues(Position.Line - 1, Position.Column - 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -38,7 +38,7 @@ namespace ChessGame.ChessPieces
 
             // northeast
             pos.SetValues(Position.Line - 1, Position.Column + 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -49,7 +49,7 @@ namespace ChessGame.ChessPieces
 
             // southwest
             pos.SetValues(Position.Line + 1, Position.Column - 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -60,7 +60,7 @@ namespace ChessGame.ChessPieces
 
             // southeast
             pos.SetValues(Position.Line + 1, Position.Column + 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)

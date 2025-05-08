@@ -26,7 +26,7 @@ namespace ChessGame.ChessMach
             {
                 Board.Board boardInit = new Board.Board();
                 boardInit.InsertFirstPieces(ref boardInit);
-                boardInit.InsertFirstPawnPieces(ref boardInit);
+                //boardInit.InsertFirstPawnPieces(ref boardInit);
                 this.board = boardInit;
             }
             catch (BoardException be)

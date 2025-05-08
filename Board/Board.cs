@@ -63,6 +63,7 @@ namespace ChessGame.Board
 
             if (IsValidPosition(position))
             {
+
                 board.Parts[position.Line, position.Column] = piece;
                 piece.Position = position;
             }
@@ -89,10 +90,10 @@ namespace ChessGame.Board
             return true;
         }
 
-        private void ValidatingPosition(Position position)
+        public void ValidatingPosition(Position position)
         {
             if (!IsValidPosition(position))
-                throw new PositionException("This position is invalid.");
+                throw new PositionException("This position is invalid. Chose position again.");
         }
 
         public bool HasPiece(Board board, Position position)

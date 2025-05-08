@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace ChessGame.ChessMach
 
         public Position ToPosition()
         {
-            return new Position(8 - Line, Column - 'a');
+            return new Position(-1 + Line, Column - 'a');
         }
 
         public override string ToString()

@@ -27,7 +27,7 @@ namespace ChessGame.ChessPieces
 
             // up
             pos.SetValues(Position.Line - 1, Position.Column);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -37,7 +37,7 @@ namespace ChessGame.ChessPieces
 
             // down
             pos.SetValues(Position.Line + 1, Position.Column);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -47,7 +47,7 @@ namespace ChessGame.ChessPieces
 
             // left
             pos.SetValues(Position.Line, Position.Column - 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)
@@ -57,7 +57,7 @@ namespace ChessGame.ChessPieces
 
             // right
             pos.SetValues(Position.Line, Position.Column + 1);
-            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+            while (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
             {
                 mat[pos.Line, pos.Column] = true;
                 if (Board.GetPart(pos) != null && Board.GetPart(pos).Colour != Colour)

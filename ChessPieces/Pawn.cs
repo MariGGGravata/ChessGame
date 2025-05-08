@@ -1,7 +1,9 @@
 ﻿using ChessGame.Board;
 using ChessGame.ChessMach;
+using ChessGame.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,35 +27,53 @@ namespace ChessGame.ChessPieces
             Position pos = new Position(0, 0);
             ChessMoviments chessMoviments = new ChessMoviments(Colour);
 
-            // up
-            pos.SetValues(Position.Line - 1, Position.Column);
-            if (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos) && pos.Line == Position.Line)
+            var rows = Board.Parts.GetLength(0);
+            var cols = Board.Parts.GetLength(1);
+
+            var firstNull = Enumerable.Range(0, rows)
+                .SelectMany(i => Enumerable.Range(0, cols), (line, column) => new { line, column })
+                .FirstOrDefault(pos => Board.Parts[pos.line, pos.column] == null);
+
+            if (firstNull.line - Position.Line == 1)
             {
-                pos.Line = pos.Line - 1;
-                mat[pos.Line, pos.Column] = true;
-            }
-
-            if (pos.Line == Position.Line)
-            {
-
-                // northwest
-                pos.SetValues(Position.Line - 1, Position.Column - 1);
-                if (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos) && pos.Column == Position.Column - 1)
+                if (firstNull.column == Position.Column)
                 {
-                    pos.Line = pos.Line - 1;
-                    pos.Column = pos.Column - 1;
-                    mat[pos.Line, pos.Column] = true;
+                    // up
+                    pos.SetValues(Position.Line + 1, Position.Column);
+                    if (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board) && pos.Line == Position.Line)
+                    {
+                        pos.Line = pos.Line + 1;
+                        mat[pos.Line, pos.Column] = true;
+                    }
                 }
-
-                // northeast
-                pos.SetValues(Position.Line - 1, Position.Column + 1);
-                if (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos))
+                else
                 {
-                    pos.Line = pos.Line - 1;
-                    pos.Column = pos.Column + 1;
-                    mat[pos.Line, pos.Column] = true;
+                    if (Board.Column - Position.Column > 0)
+                    {
+                        // northwest
+                        pos.SetValues(Position.Line + 1, Position.Column + 1);
+                        if (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board) && pos.Column == Position.Column - 1)
+                        {
+                            pos.Line = pos.Line + 1;
+                            pos.Column = pos.Column + 1;
+                            mat[pos.Line, pos.Column] = true;
+                        }
+                    }
+                    else
+                    {
+                        // northeast
+                        pos.SetValues(Position.Line + 1, Position.Column - 1);
+                        if (Board.IsValidPosition(pos) && chessMoviments.CanMove(pos, Board))
+                        {
+                            pos.Line = pos.Line + 1;
+                            pos.Column = pos.Column - 1;
+                            mat[pos.Line, pos.Column] = true;
+                        }
+                    }
                 }
             }
+            else
+                throw new MovementException("Movement not accepted, please try again.");
 
             return mat;
         }
