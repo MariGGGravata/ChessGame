@@ -63,7 +63,6 @@ namespace ChessGame.Board
 
             if (IsValidPosition(position))
             {
-
                 board.Parts[position.Line, position.Column] = piece;
                 piece.Position = position;
             }

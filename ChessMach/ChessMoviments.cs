@@ -9,63 +9,53 @@ using System.Threading.Tasks;
 
 namespace ChessGame.ChessMach
 {
-    public class ChessMoviments
+    public class ChessMoviments : ChessBoardGame
     {
-        private Board.Board _board { get; set; }
-        private int playerColour { get; set; }
 
         public ChessMoviments()
         {
-            this._board = new Board.Board();
-        }
-
-        public ChessMoviments(int colour)
-        {
-            this._board = new Board.Board();
-            this.playerColour = colour;
-        }
-
-        public void GetMoviments(ChessBoardGame chessBoardGame)
-        {
-            while (!chessBoardGame.finished)
-            {
-                Console.Clear();
-                Screen.PrintBoard(chessBoardGame.board);
-
-                Console.WriteLine("Insert origin position:");
-                Position origin = Screen.ReadChessPosition().ToPosition();
-
-                bool[,] possibleMoves = chessBoardGame.board.GetPart(origin).PossibleMoves();
-
-                Console.Clear();
-                Screen.PrintBoard(chessBoardGame.board, possibleMoves);
-
-                Console.WriteLine("Insert destiny position:");
-                Position destination = Screen.ReadChessPosition().ToPosition();
-
-                chessBoardGame.MovingParties(chessBoardGame, origin, destination);
-            }
         }
 
         public void MovingParties(ChessBoardGame chessBoardGame, Position origin, Position destination)
         {
-            Piece p = _board.RemovePiece(chessBoardGame.board, origin);
+            Piece p = board.RemovePiece(chessBoardGame.board, origin);
 
             p.IncreaseQtyMove();
 
-            _board.RemovePiece(chessBoardGame.board, destination);
+            board.RemovePiece(chessBoardGame.board, destination);
 
-            _board.PutPiece(chessBoardGame.board, p, destination);
+            board.PutPiece(chessBoardGame.board, p, destination);
 
 
             //this.MoveEspecificPart(chessBoardGame.board, p, destination);
         }
 
-        public bool CanMove(Position position, Board.Board board)
+        public void MakingAMove(ref ChessBoardGame chessBoardGame, Position origin, Position destination)
+        {
+            this.MovingParties(chessBoardGame, origin, destination);
+            ChangePlayer(ref chessBoardGame);
+        }
+            
+        public bool CanMoveFrom(Position position, Board.Board board)
         {
             Piece piece = board.GetPart(position);
 
-            return piece == null || piece.Colour != playerColour;
+            if(piece == null)
+                throw new PositionException("There is no piece in this position.");
+
+            if((Colour)piece.ColourNumber != Colour.White)
+                throw new BoardException("The chosen piece is not yours");
+
+            if (!piece.ExistsPossibelMoviments())
+                throw new MovementException("There's no possible movement for the chosen piece.");
+
+            return true;
+        }
+
+        public void CanMoveTo(Position origin, Position destination)
+        {
+            if(!board.GetPart(origin).CanMoveTo(destination))
+                throw new PositionException("Invalid target position.");
         }
 
         public void MoveEspecificPart(Board.Board board, Piece piece, Position position)
@@ -112,5 +102,7 @@ namespace ChessGame.ChessMach
                 //}
             }
         }
+
+
     }
 }

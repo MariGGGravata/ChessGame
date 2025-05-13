@@ -11,8 +11,6 @@ namespace ChessGame.Board
     {
         public static void PrintBoard(Board board, bool[,] possiblePositions = null)
         {
-            Console.WriteLine("Welcome to the Chess Game!\n");
-
             ConsoleColor originalBackground = Console.BackgroundColor;
             ConsoleColor alteredBackground = ConsoleColor.DarkBlue;
 
@@ -51,7 +49,7 @@ namespace ChessGame.Board
 
         public static void ColourPiece(Piece piece)
         {
-            if (piece.Colour == 0)
+            if ((Colour)piece.ColourNumber == Colour.White)
                 Console.Write(piece);
             else
             {

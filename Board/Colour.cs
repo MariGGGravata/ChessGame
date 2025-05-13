@@ -8,7 +8,7 @@ namespace ChessGame.Board
 {
     public enum Colour
     {
-        Black,
-        White
+        White,
+        Red
     }
 }
