@@ -26,89 +26,89 @@ namespace ChessGame.ChessPieces
             ChessMoviments chessMoviments = new ChessMoviments();
 
             // up
-            pos.SetValues(Position.Line - 1, Position.Column);
-            while (Board.IsValidPosition(pos))
+            pos.SetValues(Position.Line + 1, Position.Column);
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
-                pos.Line = pos.Line - 1;
+                mat[pos.Line, pos.Column] = true;
+                pos.Line = pos.Line + 1;
             }
 
             // down
-            pos.SetValues(Position.Line + 1, Position.Column);
-            while (Board.IsValidPosition(pos))
+            pos.SetValues(Position.Line - 1, Position.Column);
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
-                pos.Line = pos.Line + 1;
+                mat[pos.Line, pos.Column] = true;
+                pos.Line = pos.Line - 1;
             }
 
             // left
             pos.SetValues(Position.Line, Position.Column - 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Column = pos.Column - 1;
             }
 
             // right
             pos.SetValues(Position.Line, Position.Column + 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Column = pos.Column + 1;
             }
 
             // northwest
             pos.SetValues(Position.Line - 1, Position.Column - 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line - 1;
                 pos.Column = pos.Column - 1;
             }
 
             // northeast
             pos.SetValues(Position.Line - 1, Position.Column + 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line - 1;
                 pos.Column = pos.Column + 1;
             }
 
             // southwest
             pos.SetValues(Position.Line + 1, Position.Column - 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line + 1;
                 pos.Column = pos.Column - 1;
             }
 
             // southeast
             pos.SetValues(Position.Line + 1, Position.Column + 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line + 1;
                 pos.Column = pos.Column + 1;
             }
-
+            
             return mat;
         }
     }

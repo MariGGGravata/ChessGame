@@ -27,6 +27,12 @@ namespace ChessGame.Board
             this.QtyMove++;
         }
 
+        public bool CanMove(Position position)
+        {
+            Piece piece = Board.GetPart(position);
+            return piece == null || piece.ColourNumber != ColourNumber;
+        }
+
         public bool ExistsPossibelMoviments()
         {
             bool[,] mat = PossibleMoves();

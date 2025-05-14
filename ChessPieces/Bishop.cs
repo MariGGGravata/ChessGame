@@ -27,44 +27,44 @@ namespace ChessGame.ChessPieces
 
             // northwest
             pos.SetValues(Position.Line - 1, Position.Column - 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line - 1;
                 pos.Column = pos.Column - 1;
             }
 
             // northeast
             pos.SetValues(Position.Line - 1, Position.Column + 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line - 1;
                 pos.Column = pos.Column + 1;
             }
 
             // southwest
             pos.SetValues(Position.Line + 1, Position.Column - 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line + 1;
                 pos.Column = pos.Column - 1;
             }
 
             // southeast
             pos.SetValues(Position.Line + 1, Position.Column + 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null && (Colour)Board.GetPart(pos).ColourNumber != chessMoviments.partColour)
+                if (Board.GetPart(pos) != null)
                     break;
+                mat[pos.Line, pos.Column] = true;
                 pos.Line = pos.Line + 1;
                 pos.Column = pos.Column + 1;
             }

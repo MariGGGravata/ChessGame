@@ -27,34 +27,59 @@ namespace ChessGame.ChessPieces
             Position pos = new Position(0, 0);
             ChessMoviments chessMoviments = new ChessMoviments();
 
-            //var rows = Board.Parts.GetLength(0);
-            //var cols = Board.Parts.GetLength(1);
-
-            //var firstNull = Enumerable.Range(0, rows)
-            //    .SelectMany(i => Enumerable.Range(0, cols), (line, column) => new { line, column })
-            //    .FirstOrDefault(pos => Board.Parts[pos.line, pos.column] == null);
-
-            pos.SetValues(Position.Line + 1, Position.Column);
-            if (Board.IsValidPosition(pos))
+            if (Board.Parts[Position.Line, Position.Column].ColourNumber == (int)Colour.White)
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Position.Line == 1)
-                    mat[++pos.Line, pos.Column] = true;
-            }
+                //up
+                pos.SetValues(Position.Line + 1, Position.Column);
+                if (Board.IsValidPosition(pos) && CanMove(pos))
+                {
+                    mat[pos.Line, pos.Column] = true;
+                    if (Position.Line == 1)
+                        mat[++pos.Line, pos.Column] = true;
+                }
 
-            if (Board.Column - Position.Column > 0)
-            {
-                // northwest
-                pos.SetValues(Position.Line + 1, Position.Column + 1);
-                if (Board.IsValidPosition(pos) && pos.Column == Position.Column - 1)
-                    mat[++pos.Line, ++pos.Column] = true;
+                if (Board.Column - (Position.Column - 1) > 0)
+                {
+                    // northWest
+                    pos.SetValues(Position.Line + 1, Position.Column - 1);
+                    if (Board.IsValidPosition(pos) && Board.Parts[pos.Line, pos.Column]?.ColourNumber == (int)Colour.Red)
+                        mat[pos.Line, pos.Column] = true;
+                }
+
+                if (Board.Column - (Position.Column + 1) > 0)
+                {
+                    // northEast
+                    pos.SetValues(Position.Line + 1, Position.Column + 1);
+                    if (Board.IsValidPosition(pos) && Board.Parts[pos.Line, pos.Column]?.ColourNumber == (int)Colour.Red)
+                        mat[pos.Line, pos.Column] = true;
+                }
             }
             else
             {
-                // northeast
-                pos.SetValues(Position.Line + 1, Position.Column - 1);
-                if (Board.IsValidPosition(pos))
-                    mat[++pos.Line, --pos.Column] = true;
+                //down
+                pos.SetValues(Position.Line - 1, Position.Column);
+                if (Board.IsValidPosition(pos) && CanMove(pos))
+                {
+                    mat[pos.Line, pos.Column] = true;
+                    if (Position.Line == 6)
+                        mat[--pos.Line, pos.Column] = true;
+                }
+
+                if (Board.Column - (Position.Column + 1) > 0)
+                {
+                    // downEast
+                    pos.SetValues(Position.Line - 1, Position.Column + 1);
+                    if (Board.IsValidPosition(pos) && Board.Parts[pos.Line, pos.Column]?.ColourNumber == (int)Colour.White)
+                        mat[pos.Line, pos.Column] = true;
+                }
+
+                if (Board.Column - (Position.Column - 1) > 0)
+                {
+                    // downWest
+                    pos.SetValues(Position.Line - 1, Position.Column - 1);
+                    if (Board.IsValidPosition(pos) && Board.Parts[pos.Line, pos.Column]?.ColourNumber == (int)Colour.White)
+                        mat[pos.Line, pos.Column] = true;
+                }
             }
 
             return mat;

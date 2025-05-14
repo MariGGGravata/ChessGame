@@ -1,4 +1,5 @@
-﻿using ChessGame.ChessPieces;
+﻿using ChessGame.ChessMach;
+using ChessGame.ChessPieces;
 using ChessGame.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static ChessGame.Board.Position;
 
 namespace ChessGame.Board
 {
@@ -99,6 +101,12 @@ namespace ChessGame.Board
         {
             ValidatingPosition(position);
             return board.Parts[position.Line, position.Column] != null;
+        }
+
+        internal void InsertPieces(Piece piece, Position position)
+        {
+            ChessBoardGame chessBoardGame = new ChessBoardGame();
+            chessBoardGame.PutNewPiece((char)(charPosition)position.Column, position.Line, piece);
         }
     }
 }

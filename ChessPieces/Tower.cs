@@ -25,45 +25,56 @@ namespace ChessGame.ChessPieces
             bool[,] mat = new bool[Board.Line, Board.Column];
             Position pos = new Position(0, 0);
             ChessMoviments chessMoviments = new ChessMoviments();
+            Piece piece;
 
             // up
             pos.SetValues(Position.Line + 1, Position.Column);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                if (Board.GetPart(pos) != null)
-                    break;
                 mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line + 1;
+
+                if (Board.Parts[pos.Line, pos.Column] != null && Board.Parts[pos.Line, pos.Column]?.ColourNumber != ColourNumber)
+                    break;
+
+                pos.Line++;
             }
 
             // down
             pos.SetValues(Position.Line - 1, Position.Column);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null)
+
+                if (Board.Parts[pos.Line, pos.Column] != null && Board.Parts[pos.Line, pos.Column]?.ColourNumber != ColourNumber)
                     break;
-                pos.Line = pos.Line - 1;
+
+                pos.Line--;
             }
 
             // left
             pos.SetValues(Position.Line, Position.Column - 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
-                if (Board.GetPart(pos) != null)
+
+                if (Board.Parts[pos.Line, pos.Column] != null && Board.Parts[pos.Line, pos.Column]?.ColourNumber != ColourNumber)
                     break;
-                pos.Column = pos.Column - 1;
+
+                pos.Column--;
             }
 
             // right
             pos.SetValues(Position.Line, Position.Column + 1);
-            while (Board.IsValidPosition(pos))
+            while (Board.IsValidPosition(pos) && CanMove(pos))
             {
-                if (Board.GetPart(pos) != null)
-                    break;
+                piece = Board.GetPart(pos);
+
                 mat[pos.Line, pos.Column] = true;
-                pos.Column = pos.Column + 1;
+
+                if (Board.Parts[pos.Line, pos.Column] != null && Board.Parts[pos.Line, pos.Column]?.ColourNumber != ColourNumber)
+                    break;
+
+                pos.Column++;
             }
 
             return mat;

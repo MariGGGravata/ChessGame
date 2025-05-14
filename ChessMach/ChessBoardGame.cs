@@ -10,16 +10,20 @@ namespace ChessGame.ChessMach
 {
     public class ChessBoardGame
     {
-        public Board.Board board { get; private set; }
+        public Board.Board board { get; set; }
         public int shift { get; private set; }
         public bool finished { get; private set; }
         public Colour partColour { get; set; }
+        private HashSet<Piece> pieces;
+        public HashSet<Piece> capturedParts{ get; set; }
 
         public ChessBoardGame()
         {
             this.shift = 1;
             this.finished = false;
-            this.partColour = Colour.White;
+            this.partColour = Colour.White; 
+            pieces = new HashSet<Piece>();
+            capturedParts = new HashSet<Piece>();
             this.CreateInitialBoard();
         }
 
@@ -52,11 +56,11 @@ namespace ChessGame.ChessMach
                     Console.WriteLine($"Shift: {chessBoardGame.shift}\n");
                     Console.WriteLine($"Current Player: {chessBoardGame.partColour}\n");
 
-                    Screen.PrintBoard(chessBoardGame.board);
+                    Screen.PrintBoard(chessBoardGame);
 
-                    Console.WriteLine("\nInsert origin position: ");
+                    Console.Write("\nInsert origin position: ");
                     Position origin = Screen.ReadChessPosition().ToPosition();
-                    chessMoviments.CanMoveFrom(origin, chessBoardGame.board);
+                    chessMoviments.CanMoveFrom(origin, chessBoardGame);
 
                     bool[,] possibleMoves = chessBoardGame.board.GetPart(origin).PossibleMoves();
 
@@ -66,25 +70,35 @@ namespace ChessGame.ChessMach
                     Console.WriteLine($"Shift: {chessBoardGame.shift}\n");
                     Console.WriteLine($"Current Player: {chessBoardGame.partColour}\n");
 
-                    Screen.PrintBoard(chessBoardGame.board, possibleMoves);
+                    Screen.PrintBoard(chessBoardGame, possibleMoves);
 
-                    Console.WriteLine("\nInsert destiny position: ");
+                    Console.Write("\nInsert destiny position: ");
                     Position destination = Screen.ReadChessPosition().ToPosition();
-                    chessMoviments.CanMoveTo(origin, destination);
+                    chessMoviments.CanMoveTo(this.board, origin, destination);
 
                     chessMoviments.MakingAMove(ref chessBoardGame, origin, destination);
+
+                    this.board = chessBoardGame.board;
+                    this.capturedParts = chessBoardGame.capturedParts;
+                    this.pieces = chessBoardGame.pieces;
                 }
                 catch (PositionException pe)
                 {
                     Console.WriteLine($"\n{pe.Message}\n");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
                 }
                 catch (MovementException me)
                 {
                     Console.WriteLine($"\n{me.Message}\n");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
                 }
                 catch (BoardException be)
                 {
                     Console.WriteLine($"\n{be.Message}\n");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
                 }
                 catch (Exception e)
                 {
@@ -92,12 +106,9 @@ namespace ChessGame.ChessMach
                     Console.WriteLine("Press any key to exit...");
                     throw;
                 }
-                finally
-                {
-                    Console.WriteLine("Press any key.");
-                    Console.ReadLine();
-                }
             }
+
+            Console.ReadLine();
         }
 
         public void ChangePlayer(ref ChessBoardGame chessBoardGame)
@@ -107,5 +118,36 @@ namespace ChessGame.ChessMach
             else
                 chessBoardGame.partColour = Colour.White;
         }
+
+        public void PutNewPiece(char column, int line, Piece piece)
+        {
+            board.InsertPieces(piece, new ChessPosition(column, line).ToPosition());
+            pieces.Add(piece);
+        }
+
+        public HashSet<Piece> CapturedPieces(Colour colour)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece p in capturedParts)
+            {
+                if (p.ColourNumber == (int)colour)
+                    aux.Add(p);
+            }
+            return aux;
+        }
+
+        public HashSet<Piece> GamePieces(Colour colour)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece p in pieces)
+            {
+                if (p.ColourNumber == (int)colour)
+                    aux.Add(p);
+            }
+            aux.ExceptWith(CapturedPieces(colour));
+
+            return aux;
+        }
+
     }
 }
