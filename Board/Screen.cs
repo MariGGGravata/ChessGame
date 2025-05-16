@@ -1,4 +1,5 @@
 ﻿using ChessGame.ChessMach;
+using ChessGame.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,14 @@ namespace ChessGame.Board
             ConsoleColor alteredBackground = ConsoleColor.DarkBlue;
             Board board = chessBoardGame.board;
 
+            Console.WriteLine("Welcome to the Chess Game!");
+
             Console.WriteLine("\nCaptured pieces: ");
             Console.Write($"Red: ");
             PrintSet(chessBoardGame.CapturedPieces(Colour.White));
             Console.WriteLine();
 
-            for (int i = board.Line - 1; i >= 0; i--)
+            for (int i = board.Row - 1; i >= 0; i--)
             {
                 Console.Write($@" {1 + i} ");
 
@@ -44,6 +47,19 @@ namespace ChessGame.Board
             Console.WriteLine("Captured pieces: ");
             Console.Write($"White: ");
             PrintSet(chessBoardGame.CapturedPieces(Colour.Red));
+
+            Console.WriteLine($"\nShift: {chessBoardGame.shift}");
+            if (!chessBoardGame.checkMate)
+            {
+                Console.WriteLine($"\nCurrent Player: {chessBoardGame.partColour}");
+                if (chessBoardGame.check)
+                    Console.WriteLine("\nOn Check!");
+            }
+            else
+            {
+                Console.WriteLine("\nCheck Mate!");
+                Console.WriteLine($"\nWinner: {chessBoardGame.partColour}");
+            }
         }
 
         public static void PrintPart(Piece piece)
@@ -73,9 +89,13 @@ namespace ChessGame.Board
         public static ChessPosition ReadChessPosition()
         {
             string position = Console.ReadLine();
+
+            if(position.ToArray().Length < 2)
+                throw new BoardException("Please enter a valid position with row and column.");
+
             char column = position[0];
-            int line = int.Parse(position[1].ToString() + "");
-            return new ChessPosition(column, line);
+            int row = int.Parse(position[1].ToString() + "");
+            return new ChessPosition(column, row);
         }
 
         public static void PrintSet(HashSet<Piece> set)

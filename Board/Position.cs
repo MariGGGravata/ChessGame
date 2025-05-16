@@ -8,18 +8,18 @@ namespace ChessGame.Board
 {
     public class Position
     {
-        public int Line { get; set; }
+        public int Row { get; set; }
         public int Column { get; set; }
 
-        public Position(int line, int column)
+        public Position(int row, int column)
         {
-            this.Line = line;
+            this.Row = row;
             this.Column = column;
         }
 
-        public void SetValues(int line, int column)
+        public void SetValues(int row, int column)
         {
-            this.Line = line;
+            this.Row = row;
             this.Column = column;
         }
 

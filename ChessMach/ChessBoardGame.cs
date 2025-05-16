@@ -11,19 +11,22 @@ namespace ChessGame.ChessMach
     public class ChessBoardGame
     {
         public Board.Board board { get; set; }
-        public int shift { get; private set; }
-        public bool finished { get; private set; }
+        public int shift { get; set; }
+        public bool checkMate { get; set; }
         public Colour partColour { get; set; }
         private HashSet<Piece> pieces;
         public HashSet<Piece> capturedParts{ get; set; }
+        public bool check { get; set; }
 
         public ChessBoardGame()
         {
             this.shift = 1;
-            this.finished = false;
+            this.checkMate = false;
             this.partColour = Colour.White; 
-            pieces = new HashSet<Piece>();
-            capturedParts = new HashSet<Piece>();
+            this.pieces = new HashSet<Piece>();
+            this.capturedParts = new HashSet<Piece>();
+            this.check = false;
+            this.board = new Board.Board();
             this.CreateInitialBoard();
         }
 
@@ -31,10 +34,8 @@ namespace ChessGame.ChessMach
         {
             try
             {
-                Board.Board boardInit = new Board.Board();
-                boardInit.InsertFirstPieces(ref boardInit);
-                boardInit.InsertFirstPawnPieces(ref boardInit);
-                this.board = boardInit;
+                board.InsertFirstPieces(board, pieces);
+                board.InsertFirstPawnPieces(board, pieces);
             }
             catch (BoardException be)
             {
@@ -42,45 +43,31 @@ namespace ChessGame.ChessMach
             }
         }
 
-        public void GetMoviments(ChessBoardGame chessBoardGame)
+        public void GetMoviments()
         {
             ChessMoviments chessMoviments = new ChessMoviments();
 
-            while (!chessBoardGame.finished)
+            while (!checkMate)
             {
                 try
                 {
                     Console.Clear();
-
-                    Console.WriteLine("Welcome to the Chess Game!\n");
-                    Console.WriteLine($"Shift: {chessBoardGame.shift}\n");
-                    Console.WriteLine($"Current Player: {chessBoardGame.partColour}\n");
-
-                    Screen.PrintBoard(chessBoardGame);
+                    Screen.PrintBoard(this);
 
                     Console.Write("\nInsert origin position: ");
                     Position origin = Screen.ReadChessPosition().ToPosition();
-                    chessMoviments.CanMoveFrom(origin, chessBoardGame);
+                    chessMoviments.CanMoveFrom(origin, this);
 
-                    bool[,] possibleMoves = chessBoardGame.board.GetPart(origin).PossibleMoves();
+                    bool[,] possibleMoves = board.GetPart(origin).PossibleMoves();
 
                     Console.Clear();
-
-                    Console.WriteLine("Welcome to the Chess Game!\n");
-                    Console.WriteLine($"Shift: {chessBoardGame.shift}\n");
-                    Console.WriteLine($"Current Player: {chessBoardGame.partColour}\n");
-
-                    Screen.PrintBoard(chessBoardGame, possibleMoves);
+                    Screen.PrintBoard(this, possibleMoves);
 
                     Console.Write("\nInsert destiny position: ");
                     Position destination = Screen.ReadChessPosition().ToPosition();
-                    chessMoviments.CanMoveTo(this.board, origin, destination);
+                    chessMoviments.CanMoveTo(board, origin, destination);
 
-                    chessMoviments.MakingAMove(ref chessBoardGame, origin, destination);
-
-                    this.board = chessBoardGame.board;
-                    this.capturedParts = chessBoardGame.capturedParts;
-                    this.pieces = chessBoardGame.pieces;
+                    chessMoviments.MakingAMove(this, origin, destination);
                 }
                 catch (PositionException pe)
                 {
@@ -100,6 +87,12 @@ namespace ChessGame.ChessMach
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadLine();
                 }
+                catch (PartException pe)
+                {
+                    Console.WriteLine($"\n{pe.Message}\n");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
+                }
                 catch (Exception e)
                 {
                     Console.WriteLine($"\nError: {e.Message}\n");
@@ -108,21 +101,18 @@ namespace ChessGame.ChessMach
                 }
             }
 
+            Console.Clear();
+            Screen.PrintBoard(this);
+
             Console.ReadLine();
         }
 
-        public void ChangePlayer(ref ChessBoardGame chessBoardGame)
+        public void ChangePlayer()
         {
-            if (++chessBoardGame.shift % 2 == 0)
-                chessBoardGame.partColour = Colour.Red;
+            if (shift % 2 == 0)
+                partColour = Colour.Red;
             else
-                chessBoardGame.partColour = Colour.White;
-        }
-
-        public void PutNewPiece(char column, int line, Piece piece)
-        {
-            board.InsertPieces(piece, new ChessPosition(column, line).ToPosition());
-            pieces.Add(piece);
+                partColour = Colour.White;
         }
 
         public HashSet<Piece> CapturedPieces(Colour colour)
@@ -147,6 +137,14 @@ namespace ChessGame.ChessMach
             aux.ExceptWith(CapturedPieces(colour));
 
             return aux;
+        }
+
+        public Colour Oponent(Colour colour)
+        {
+            if(colour == Colour.White)
+                return Colour.Red;
+            else
+                return Colour.White;
         }
 
     }

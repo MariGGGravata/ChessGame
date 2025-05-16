@@ -26,6 +26,10 @@ namespace ChessGame.Board
         {
             this.QtyMove++;
         }
+        public void DecreaseQtyMove()
+        {
+            this.QtyMove--;
+        }
 
         public bool CanMove(Position position)
         {
@@ -37,7 +41,7 @@ namespace ChessGame.Board
         {
             bool[,] mat = PossibleMoves();
 
-            for (int i = 0; i < Board.Line; i++)
+            for (int i = 0; i < Board.Row; i++)
             {
                 for (int j = 0; j < Board.Column; j++)
                 {
@@ -53,7 +57,7 @@ namespace ChessGame.Board
 
         public bool CanMoveTo(Position position)
         {
-            return PossibleMoves()[position.Line, position.Column];
+            return PossibleMoves()[position.Row, position.Column];
         }   
 
         public abstract bool[,] PossibleMoves();

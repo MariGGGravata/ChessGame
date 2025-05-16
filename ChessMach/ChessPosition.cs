@@ -11,21 +11,21 @@ namespace ChessGame.ChessMach
     public class ChessPosition
     {
         public char Column { get; set; }
-        public int Line { get; set; }
-        public ChessPosition(char column, int line)
+        public int Row { get; set; }
+        public ChessPosition(char column, int row)
         {
             Column = column;
-            Line = line;
+            Row = row;
         }
 
         public Position ToPosition()
         {
-            return new Position(-1 + Line, Column - 'a');
+            return new Position(- 1 + Row, Column - 'a');
         }
 
         public override string ToString()
         {
-            return $@" {Column}{Line}";
+            return $@" {Column}{Row}";
         }
     }
 }

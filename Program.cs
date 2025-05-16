@@ -10,10 +10,8 @@ namespace ChessGame
         public static void Main(string[] args)
         {
             ChessBoardGame chessBoardGame = new ChessBoardGame();
-            ChessMoviments chessMoviments = new ChessMoviments();
 
-            chessMoviments.GetMoviments(chessBoardGame);
-            
+            chessBoardGame.GetMoviments();
         }
     }
 }

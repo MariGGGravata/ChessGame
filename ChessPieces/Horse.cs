@@ -21,81 +21,49 @@ namespace ChessGame.ChessPieces
 
         public override bool[,] PossibleMoves()
         {
-            bool[,] mat = new bool[Board.Line, Board.Column];
+            bool[,] mat = new bool[Board.Row, Board.Column];
             Position pos = new Position(0, 0);
             ChessMoviments chessMoviments = new ChessMoviments();
 
             // upRight
-            pos.SetValues(Position.Line + 2, Position.Column + 1);
+            pos.SetValues(Position.Row + 2, Position.Column + 1);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line + 2;
-                pos.Column = pos.Column + 1;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // upLeft
-            pos.SetValues(Position.Line + 2, Position.Column - 1);
+            pos.SetValues(Position.Row + 2, Position.Column - 1);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line + 2;
-                pos.Column = pos.Column - 1;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // downRight
-            pos.SetValues(Position.Line - 2, Position.Column + 1);
+            pos.SetValues(Position.Row - 2, Position.Column + 1);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line - 2;
-                pos.Column = pos.Column + 1;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // downLeft
-            pos.SetValues(Position.Line - 2, Position.Column - 1);
+            pos.SetValues(Position.Row - 2, Position.Column - 1);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line - 2;
-                pos.Column = pos.Column - 1;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // leftUp
-            pos.SetValues(Position.Line + 1, Position.Column - 2);
+            pos.SetValues(Position.Row + 1, Position.Column - 2);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line + 1;
-                pos.Column = pos.Column - 2;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // leftDown
-            pos.SetValues(Position.Line - 1, Position.Column - 2);
+            pos.SetValues(Position.Row - 1, Position.Column - 2);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line - 1;
-                pos.Column = pos.Column - 2;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // rightUp
-            pos.SetValues(Position.Line + 1, Position.Column + 2);
+            pos.SetValues(Position.Row + 1, Position.Column + 2);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line + 1;
-                pos.Column = pos.Column + 2;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             // rightDown
-            pos.SetValues(Position.Line - 1, Position.Column + 2);
+            pos.SetValues(Position.Row - 1, Position.Column + 2);
             if (Board.IsValidPosition(pos) && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-                pos.Line = pos.Line - 1;
-                pos.Column = pos.Column + 2;
-            }
+                mat[pos.Row, pos.Column] = true;
 
             return mat;
         }
