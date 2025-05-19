@@ -1,101 +1,117 @@
-﻿using ChessGame.ChessPieces;
+﻿using ChessGame.ChessMach;
+using ChessGame.ChessPieces;
 using ChessGame.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static ChessGame.Board.Position;
 
 namespace ChessGame.Board
 {
     public class Board
     {
-        public int Line { get; set; }
+        public int Row { get; set; }
         public int Column { get; set; }
         public Piece[,] Parts;
 
         public Board()
         {
-            this.Line = 8;
+            this.Row = 8;
             this.Column = 8;
             this.Parts = new Piece[8, 8];
         }
 
-        public void InsertFirstPawnPieces(ref Board board)
+        public Piece PutNewPiece(char column, int row, Piece piece)
         {
-            for (int i = 0; i < board.Column; i++)
+            return PutPiece(piece, new ChessPosition(column, row).ToPosition());
+        }
+
+        public void InsertFirstPawnPieces(ChessBoardGame chessBoardGame)
+        {
+            for (int i = 0; i < chessBoardGame.board.Column; i++)
             {
-                PutPiece(board, new Pawn(board, 0), new Position(1, i));
-                PutPiece(board, new Pawn(board, 1), new Position(6, i));
+                chessBoardGame.pieces.Add(PutPiece(new Pawn(chessBoardGame.board, 0, chessBoardGame), new Position(1, i)));
+                chessBoardGame.pieces.Add(PutPiece(new Pawn(chessBoardGame.board, 1, chessBoardGame), new Position(6, i)));
             }
         }
 
-        public void InsertFirstPieces(ref Board board)
+        public void InsertFirstPieces(ChessBoardGame chessBoardGame)
         {
-            int line = 0;
+            int row = 0;
 
             for (int i = 0; i < 2; i++)
             {
-                PutPiece(board, new Tower(board, i), new Position(line, 0));
-                PutPiece(board, new Horse(board, i), new Position(line, 1));
-                PutPiece(board, new Bishop(board, i), new Position(line, 2));
-                PutPiece(board, new King(board, i), new Position(line, 3));
-                PutPiece(board, new Queen(board, i), new Position(line, 4));
-                PutPiece(board, new Bishop(board, i), new Position(line, 5));
-                PutPiece(board, new Horse(board, i), new Position(line, 6));
-                PutPiece(board, new Tower(board, i), new Position(line, 7));
+                chessBoardGame.pieces.Add(PutPiece(new Tower(chessBoardGame.board, i), new Position(row, 0)));
+                chessBoardGame.pieces.Add(PutPiece(new Horse(chessBoardGame.board, i), new Position(row, 1)));
+                chessBoardGame.pieces.Add(PutPiece(new Bishop(chessBoardGame.board, i), new Position(row, 2)));
+                chessBoardGame.pieces.Add(PutPiece(new Queen(chessBoardGame.board, i), new Position(row, 3)));
+                chessBoardGame.pieces.Add(PutPiece(new King(chessBoardGame.board, i, chessBoardGame), new Position(row, 4)));
+                chessBoardGame.pieces.Add(PutPiece(new Bishop(chessBoardGame.board, i), new Position(row, 5)));
+                chessBoardGame.pieces.Add(PutPiece(new Horse(chessBoardGame.board, i), new Position(row, 6)));
+                chessBoardGame.pieces.Add(PutPiece(new Tower(chessBoardGame.board, i), new Position(row, 7)));
 
-                line+=7;
+                row = 7;
             }
         }
 
         public Piece GetPart(Position position)
         {
-            return Parts[position.Line, position.Column];
+            return Parts[position.Row, position.Column];
         }
 
-        public void PutPiece(Board board, Piece piece, Position position)
+        public Piece PutPiece(Piece piece, Position position)
         {
-            if (HasPiece(board, position))
-                throw new BoardException("There is already a piece in this position.");
+            if (HasPiece(position))
+                throw new PositionException("There is already a piece in this position.");
 
-            if (ValidPosition(position))
+            if (IsValidPosition(position))
             {
-                board.Parts[position.Line, position.Column] = piece;
+                Parts[position.Row, position.Column] = piece;
                 piece.Position = position;
             }
+            return piece;
         }
 
         public Piece RemovePiece(Board board, Position position)
         {
-            if (board.Parts[position.Line, position.Column] == null)
+            ValidatingPosition(position);
+
+            if (board.Parts[position.Row, position.Column] == null)
                 return null;
 
-            Piece aux = board.Parts[position.Line, position.Column];
+            Piece aux = board.Parts[position.Row, position.Column];
             aux.Position = null;
-            board.Parts[position.Line, position.Column] = null;
+            board.Parts[position.Row, position.Column] = null;
             return aux;
         }
 
-        private bool ValidPosition(Position position)
+        public bool IsValidPosition(Position position)
         {
-            if (position.Line < 0 || position.Line >= Line || position.Column < 0 || position.Column >= Column)
+            if (position.Row < 0 || position.Row >= Row || position.Column < 0 || position.Column >= Column)
                 return false;
 
             return true;
         }
 
-        private void ValidatingPosition(Position position)
+        public void ValidatingPosition(Position position)
         {
-            if (!ValidPosition(position))
-                throw new BoardException("This position is invalid.");
+            if (!IsValidPosition(position))
+                throw new PositionException("This position is invalid. Chose position again.");
         }
 
-        private bool HasPiece(Board board, Position position)
+        public bool HasPiece(Position position)
         {
             ValidatingPosition(position);
-            return board.Parts[position.Line, position.Column] != null;
+            return Parts[position.Row, position.Column] != null;
+        }
+
+        internal void InsertPieces(ChessBoardGame chessBoardGame, Piece piece, Position position)
+        {
+
         }
     }
 }
