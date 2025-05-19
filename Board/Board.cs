@@ -30,31 +30,31 @@ namespace ChessGame.Board
             return PutPiece(piece, new ChessPosition(column, row).ToPosition());
         }
 
-        public void InsertFirstPawnPieces(Board board, HashSet<Piece> pieces)
+        public void InsertFirstPawnPieces(ChessBoardGame chessBoardGame)
         {
-            for (int i = 0; i < board.Column; i++)
+            for (int i = 0; i < chessBoardGame.board.Column; i++)
             {
-                pieces.Add(PutPiece(new Pawn(board, 0), new Position(1, i)));
-                pieces.Add(PutPiece(new Pawn(board, 1), new Position(6, i)));
+                chessBoardGame.pieces.Add(PutPiece(new Pawn(chessBoardGame.board, 0, chessBoardGame), new Position(1, i)));
+                chessBoardGame.pieces.Add(PutPiece(new Pawn(chessBoardGame.board, 1, chessBoardGame), new Position(6, i)));
             }
         }
 
-        public void InsertFirstPieces(Board board, HashSet<Piece> pieces)
+        public void InsertFirstPieces(ChessBoardGame chessBoardGame)
         {
             int row = 0;
 
             for (int i = 0; i < 2; i++)
             {
-                pieces.Add(PutPiece(new Tower(board, i), new Position(row, 0)));
-                pieces.Add(PutPiece(new Horse(board, i), new Position(row, 1)));
-                pieces.Add(PutPiece(new Bishop(board, i), new Position(row, 2)));
-                pieces.Add(PutPiece(new King(board, i), new Position(row, 3)));
-                pieces.Add(PutPiece(new Queen(board, i), new Position(row, 4)));
-                pieces.Add(PutPiece(new Bishop(board, i), new Position(row, 5)));
-                pieces.Add(PutPiece(new Horse(board, i), new Position(row, 6)));
-                pieces.Add(PutPiece(new Tower(board, i), new Position(row, 7)));
+                chessBoardGame.pieces.Add(PutPiece(new Tower(chessBoardGame.board, i), new Position(row, 0)));
+                chessBoardGame.pieces.Add(PutPiece(new Horse(chessBoardGame.board, i), new Position(row, 1)));
+                chessBoardGame.pieces.Add(PutPiece(new Bishop(chessBoardGame.board, i), new Position(row, 2)));
+                chessBoardGame.pieces.Add(PutPiece(new Queen(chessBoardGame.board, i), new Position(row, 3)));
+                chessBoardGame.pieces.Add(PutPiece(new King(chessBoardGame.board, i, chessBoardGame), new Position(row, 4)));
+                chessBoardGame.pieces.Add(PutPiece(new Bishop(chessBoardGame.board, i), new Position(row, 5)));
+                chessBoardGame.pieces.Add(PutPiece(new Horse(chessBoardGame.board, i), new Position(row, 6)));
+                chessBoardGame.pieces.Add(PutPiece(new Tower(chessBoardGame.board, i), new Position(row, 7)));
 
-                row += 7;
+                row = 7;
             }
         }
 

@@ -31,6 +31,44 @@ namespace ChessGame.ChessMach
             if (capturedPart != null)
                 chessBoardGame.capturedParts.Add(capturedPart);
 
+            //Castling
+
+            //Kingside castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position towerOrigin = new Position(origin.Row, origin.Column + 3);
+                Position towerDestination = new Position(origin.Row, origin.Column + 1);
+                Piece tower = chessBoardGame.board.RemovePiece(chessBoardGame.board, towerOrigin);
+                tower.IncreaseQtyMove();
+                chessBoardGame.board.PutPiece(tower, towerDestination);
+            }
+
+            //Queenside castling
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position towerOrigin = new Position(origin.Row, origin.Column - 4);
+                Position towerDestination = new Position(origin.Row, origin.Column - 1);
+                Piece tower = chessBoardGame.board.RemovePiece(chessBoardGame.board, towerOrigin);
+                tower.IncreaseQtyMove();
+                chessBoardGame.board.PutPiece(tower, towerDestination);
+            }
+
+            //En Passant
+            if(p is Pawn)
+            {
+                if(origin.Column != destination.Column && capturedPart == null)
+                {
+                    Position pawnPosition;
+                    if (p.ColourNumber == (int)Colour.White)
+                        pawnPosition = new Position(destination.Row - 1, destination.Column);
+                    else
+                        pawnPosition = new Position(destination.Row + 1, destination.Column);
+
+                    capturedPart = chessBoardGame.board.RemovePiece(chessBoardGame.board, pawnPosition);
+                    chessBoardGame.capturedParts.Add(capturedPart);
+                }
+            }
+
             return capturedPart;
         }
 
@@ -44,14 +82,91 @@ namespace ChessGame.ChessMach
                 throw new MovementException("You can't put yourself in check.");
             }
 
+            Piece p = chessBoardGame.board.GetPart(destination);
+
+            //Pawn promotion
+            if(p is Pawn)
+            {
+                if((p.ColourNumber == (int)Colour.White && destination.Row == 7) || (p.ColourNumber == (int)Colour.Red && destination.Row == 0))
+                {
+                    p = chessBoardGame.board.RemovePiece(chessBoardGame.board, destination);
+                    chessBoardGame.pieces.Remove(p);
+                    Piece queen = new Queen(chessBoardGame.board, p.ColourNumber);
+                    chessBoardGame.board.PutPiece(queen, destination);
+                    chessBoardGame.pieces.Add(queen);
+                }
+            }
+
+
             chessBoardGame.check = TestCheck(chessBoardGame, chessBoardGame.Oponent(chessBoardGame.partColour));
 
             if (TestCheckMate(chessBoardGame, chessBoardGame.Oponent(chessBoardGame.partColour)))
                 chessBoardGame.checkMate = true;
             else
             {
+                chessBoardGame.checkMate = false;
                 chessBoardGame.shift++;
                 chessBoardGame.ChangePlayer();
+            }
+
+            //En Passant
+            if (p is Pawn && (destination.Row == origin.Row - 2 || destination.Row == origin.Row + 2))
+                chessBoardGame.CanEnPassant = p;
+            else
+                chessBoardGame.CanEnPassant = null;
+        }
+
+        private void UndoMove(ChessBoardGame chessBoardGame, Position origin, Position destination, Piece capturedPart)
+        {
+            Piece p = chessBoardGame.board.RemovePiece(chessBoardGame.board, destination);
+
+            p.DecreaseQtyMove();
+
+            if (capturedPart != null)
+            {
+                chessBoardGame.board.PutPiece(capturedPart, destination);
+                chessBoardGame.capturedParts.Remove(capturedPart);
+            }
+
+            chessBoardGame.board.PutPiece(p, origin);
+
+            //Castling
+
+            //Kingside castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position towerOrigin = new Position(origin.Row, origin.Column + 3);
+                Position towerDestination = new Position(origin.Row, origin.Column + 1);
+                Piece tower = chessBoardGame.board.RemovePiece(chessBoardGame.board, towerDestination);
+                tower.DecreaseQtyMove();
+                chessBoardGame.board.PutPiece(tower, towerOrigin);
+            }
+
+            //Queenside castling
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position towerOrigin = new Position(origin.Row, origin.Column - 4);
+                Position towerDestination = new Position(origin.Row, origin.Column - 1);
+                Piece tower = chessBoardGame.board.RemovePiece(chessBoardGame.board, towerDestination);
+                tower.DecreaseQtyMove();
+                chessBoardGame.board.PutPiece(tower, towerOrigin);
+            }
+
+            //En Passant
+            if (p is Pawn)
+            {
+                if (origin.Column != destination.Column && capturedPart == chessBoardGame.CanEnPassant)
+                {
+                    Piece pawn = chessBoardGame.board.RemovePiece(chessBoardGame.board, destination);
+                    Position pawnPosition;
+
+                    if (p.ColourNumber == (int)Colour.White)
+                        pawnPosition = new Position(4, destination.Column);
+                    else
+                        pawnPosition = new Position(3, destination.Column);
+
+                    capturedPart = chessBoardGame.board.PutPiece(pawn, pawnPosition);
+                }
             }
         }
 
@@ -132,19 +247,5 @@ namespace ChessGame.ChessMach
             return true;
         }
 
-        private void UndoMove(ChessBoardGame chessBoardGame, Position origin, Position destination, Piece capturedPart)
-        {
-            Piece p = chessBoardGame.board.RemovePiece(chessBoardGame.board, destination);
-
-            p.DecreaseQtyMove();
-
-            if (capturedPart != null)
-            {
-                chessBoardGame.board.PutPiece(capturedPart, destination);
-                chessBoardGame.capturedParts.Remove(capturedPart);
-            }
-
-            chessBoardGame.board.PutPiece(p, origin);
-        }
     }
 }

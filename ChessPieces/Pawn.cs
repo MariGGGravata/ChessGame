@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace ChessGame.ChessPieces
 {
-    internal class Pawn : Piece
+    public class Pawn : Piece
     {
-        public Pawn(Board.Board board, int colour) : base(board, colour)
+        private ChessBoardGame chessBoardGame;
+        public Pawn(Board.Board board, int colour, ChessBoardGame chessBoardGame) : base(board, colour)
         {
+            this.chessBoardGame = chessBoardGame;
         }
 
         public override string ToString()
@@ -60,6 +62,26 @@ namespace ChessGame.ChessPieces
                 pos.SetValues(Position.Row + 1, Position.Column + 1);
                 if (Board.IsValidPosition(pos) && ExistEnemy(pos))
                     mat[pos.Row, pos.Column] = true;
+
+
+                //En passant
+                if(Position.Row == 4)
+                {
+                    Position leftPosition = new Position(Position.Row, Position.Column - 1);
+                    if(Board.IsValidPosition(leftPosition) && ExistEnemy(leftPosition) && chessBoardGame.board.GetPart(leftPosition) == chessBoardGame.CanEnPassant)
+                    {
+                        mat[leftPosition.Row + 1, leftPosition.Column] = true;
+                    }
+
+                    Position rightPosition = new Position(Position.Row, Position.Column + 1);
+                    if(Board.IsValidPosition(rightPosition) && ExistEnemy(rightPosition) && chessBoardGame.board.GetPart(rightPosition) == chessBoardGame.CanEnPassant)
+                    {
+                        mat[rightPosition.Row + 1, rightPosition.Column] = true;
+                    }
+                }
+
+                //Pawn promotion
+
             }
             else
             {
@@ -82,7 +104,28 @@ namespace ChessGame.ChessPieces
                 pos.SetValues(Position.Row - 1, Position.Column + 1);
                 if (Board.IsValidPosition(pos) && ExistEnemy(pos))
                     mat[pos.Row, pos.Column] = true;
+
+                //En passant
+                if (Position.Row == 3)
+                {
+                    Position leftPosition = new Position(Position.Row, Position.Column - 1);
+                    if (Board.IsValidPosition(leftPosition) && ExistEnemy(leftPosition) && chessBoardGame.board.GetPart(leftPosition) == chessBoardGame.CanEnPassant)
+                    {
+                        mat[leftPosition.Row - 1, leftPosition.Column] = true;
+                    }
+
+                    Position rightPosition = new Position(Position.Row, Position.Column + 1);
+                    if (Board.IsValidPosition(rightPosition) && ExistEnemy(rightPosition) && chessBoardGame.board.GetPart(rightPosition) == chessBoardGame.CanEnPassant)
+                    {
+                        mat[rightPosition.Row - 1, rightPosition.Column] = true;
+                    }
+                }
+
+                //Pawn promotion
             }
+
+            //En passant
+
 
             return mat;
         }

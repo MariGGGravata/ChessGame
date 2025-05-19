@@ -10,13 +10,14 @@ namespace ChessGame.ChessMach
 {
     public class ChessBoardGame
     {
-        public Board.Board board { get; set; }
+        public Board.Board board { get; private set; }
         public int shift { get; set; }
         public bool checkMate { get; set; }
-        public Colour partColour { get; set; }
-        private HashSet<Piece> pieces;
+        public Colour partColour { get; private set; }
+        public HashSet<Piece> pieces { get; set; }
         public HashSet<Piece> capturedParts{ get; set; }
         public bool check { get; set; }
+        public Piece CanEnPassant;
 
         public ChessBoardGame()
         {
@@ -27,6 +28,7 @@ namespace ChessGame.ChessMach
             this.capturedParts = new HashSet<Piece>();
             this.check = false;
             this.board = new Board.Board();
+            this.CanEnPassant = null;
             this.CreateInitialBoard();
         }
 
@@ -34,8 +36,8 @@ namespace ChessGame.ChessMach
         {
             try
             {
-                board.InsertFirstPieces(board, pieces);
-                board.InsertFirstPawnPieces(board, pieces);
+                board.InsertFirstPieces(this);
+                board.InsertFirstPawnPieces(this);
             }
             catch (BoardException be)
             {
