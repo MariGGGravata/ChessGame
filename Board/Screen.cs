@@ -85,17 +85,23 @@ namespace ChessGame.Board
                 Console.ForegroundColor = aux;
             }
         }
-
         public static ChessPosition ReadChessPosition()
         {
-            string position = Console.ReadLine();
+            string position = Console.ReadLine().ToLower();
+            char column;
 
-            if(position.ToArray().Length < 2)
-                throw new BoardException("Please enter a valid position with row and column.");
+            if (position.ToArray().Length < 2 || position.ToArray().Length > 2)
+                throw new BoardException("Please enter a valid position, being a letter for the row and a number for the column.");
 
-            char column = position[0];
-            int row = int.Parse(position[1].ToString() + "");
-            return new ChessPosition(column, row);
+            if (!int.TryParse(position[0].ToString(), out int columnInt))
+                column = position[0];
+            else
+                throw new BoardException("Please enter a valid position, being a letter for the row and a number for the column.");
+
+            if (int.TryParse(position[1].ToString(), out int row))
+                return new ChessPosition(column, row);
+            else
+                throw new BoardException("Please enter a valid position, being a letter for the row and a number for the column.");
         }
 
         public static void PrintSet(HashSet<Piece> set)
